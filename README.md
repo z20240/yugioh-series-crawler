@@ -4,6 +4,10 @@
 
 其中之後利用台灣 [巧巧屋](http://www.ocg.idv.tw/) 的中文資料庫完善整理卡片列表的資訊。
 
+This project mainly focuses on crawling card information & card pictures of Yu-Gi-Oh in Japan [Card Rush](https://www.cardrush.jp)
+
+Among them, the Chinese database of Taiwan [QiaoQiaoWu](http://www.ocg.idv.tw/) was used to improve the information of the card list.
+
 ## 安裝 Install
 
 ```bash
@@ -23,7 +27,7 @@ $ yarn install
 Please find the `data.ts` file, and write the information required for crawling according to the data format.
 
 Example.
-```json
+```javascript
 {
   "系列編號|series_no": {
     "chTitle": "本系列的中文名稱|chinese_name_in_each_series",
@@ -57,4 +61,10 @@ $ yarn start
 3. Result 結果
 你可以在專案目錄中看到產生對應的目錄
 其中會有 `卡片.csv`, `系列.csv` 以及對應的卡片圖檔
+
+You can see the corresponding directory in the project directory
+There will be `card.csv`, `series.csv` and corresponding card image files
+
+<img width="1032" alt="image" src="https://github.com/z20240/yugioh-series-crawler/assets/11765954/cb78b106-a12d-44c7-813b-5cad41c3a8fe">
+
 
