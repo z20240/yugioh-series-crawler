@@ -42,6 +42,7 @@ export const Constants = {
   OCG_CHIAO_CHIAO_WU: "http://220.134.173.17/gameking/card/ocg_show.asp?call_no=",
   RARITY: {
     "ノーマル": "普卡",
+    "ノーマルパラレル": "普鑽",
     "レア": "銀字",
     "スーパー": "亮面",
     "ウルトラ": "金亮",
@@ -50,6 +51,7 @@ export const Constants = {
     "シークレット": "半鑽",
     "エクストラシークレット": "斜鑽",
     "ホログラフィック": "雷射",
+    "20thシークレット": "20th鑽",
     "クォーターセンチュリーシークレット": "25th鑽",
   } as Rarity,
   RARITY_TO_ID_MAP: {
