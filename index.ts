@@ -88,7 +88,7 @@ async function fetchNecessaryData(id: number, { seriesIdx, series, period, chTit
   if (imageUrl) await downloadImage(imageUrl, pathName);
 
   return {
-    csv1: [seriesIdx, 1, period, '', chTitle, series, seriesIdx, ''],
+    csv1: [],
     csv2: ['', seriesIdx, plantRarity, chName, seriesNo, uid, pathName]
   }
 }
@@ -119,7 +119,7 @@ async function main() {
       }
     }, { csv1: [seriesHeader], csv2: [cardHeader] } as CSVs);
 
-    writeToCsv(csv1, `./${key}/系列.csv`);
+    writeToCsv([seriesHeader, ['', 1, period, '', chTitle, series, key, '']], `./${key}/系列.csv`);
     writeToCsv(csv2, `./${key}/卡片.csv`);
   }))
 
