@@ -37,6 +37,8 @@ export interface RarityToIdMap {
 
 export const rangeToList = (start: number, end: number) => Array.from({ length: end - start + 1 }, (_, idx) => start + idx);
 
+export const isValidSeriesNumber = (str: string) => /[\w]+-[\w]+/.test(str)
+
 export const Constants = {
   CARD_RUSH: "https://www.cardrush.jp/phone/product/",
   OCG_CHIAO_CHIAO_WU: "http://220.134.173.17/gameking/card/ocg_show.asp?call_no=",

@@ -1,7 +1,7 @@
 import {data} from './data';
 import * as iconv from 'iconv-lite';
 import axios from 'axios';
-import { cardHeader, seriesHeader, Constants, downloadImage, writeToCsv, rangeToList, createFolder } from './utils';
+import { cardHeader, seriesHeader, Constants, downloadImage, writeToCsv, rangeToList, createFolder, isValidSeriesNumber } from './utils';
 import { load } from 'cheerio';
 import BPromise from 'bluebird';
 
@@ -40,17 +40,17 @@ async function getPropertiesFromCardRushPage (id: number) {
 
     if (!matches) return {};
 
-    const [_, _jpName, plantRarity, series, _cardType] = matches;
+    const [_, jpName, plantRarity, series, _cardType] = matches;
     const imageUrl = $("a.gallery_link").attr("href");
 
-    return { series, imageUrl, plantRarity: RarityToIdMap[Rarity[plantRarity]] ?? plantRarity };
+    return { series, imageUrl, plantRarity: RarityToIdMap[Rarity[plantRarity]] ?? plantRarity, jpName };
   } catch (e) {
     console.log("🚀 ~ file:index.ts:35 ~ getPropertiesFromCardRushPage ~ e", e)
     throw e;
   }
 }
 
-async function getPropertiesFromChiaoChiaoWuPage (series: string) {
+async function getPropertiesFromChiaoChiaoWuPage (series: string, option?: { id?: number|string; imageUrl?: string}) {
   try {
     const {data: page} = await axios.get(`${Constants.OCG_CHIAO_CHIAO_WU}${series}`, {
       responseType: 'arraybuffer',
@@ -69,23 +69,31 @@ async function getPropertiesFromChiaoChiaoWuPage (series: string) {
 
     return { chName, uid };
   } catch (e) {
-    console.log("🚀 ~ file: index.ts:57 ~ getPropertiesFromCardRushPage ~ e", e)
+    console.log("🚀 ~ file: index.ts:72 ~ getPropertiesFromChiaoChiaoWuPage ~ series=", series, option?.id, option?.imageUrl)
     throw e;
   }
 }
 
-async function fetchNecessaryData(id: number, { seriesIdx, series, period, chTitle } : { seriesIdx: string; series: string; period: number ; chTitle: string }): Promise<CSV_Raws> {
+async function fetchNecessaryData(id: number, { seriesIdx } : { seriesIdx: string; series: string; period: number ; chTitle: string }): Promise<CSV_Raws> {
   // RC04-JP000, imageUrl, 白鑽
-  const { series: seriesNo, imageUrl, plantRarity } = await getPropertiesFromCardRushPage(id);
+  const { series: seriesNo, imageUrl, plantRarity, jpName } = await getPropertiesFromCardRushPage(id);
 
-  if (!seriesNo) return { csv1: [], csv2: [] };
+  if (!seriesNo && !imageUrl) return { csv1: [], csv2: [] };
 
-  // 卡片名稱, 卡片密碼
-  const { chName, uid } = await getPropertiesFromChiaoChiaoWuPage(seriesNo);
 
-  const pathName = `./${seriesIdx}/${seriesNo}_${plantRarity}.jpg`;
+  const pathName = isValidSeriesNumber(seriesNo) ? `./data/${seriesIdx}/${seriesNo}_${plantRarity}.jpg` : `./data/${seriesIdx}/${jpName}.jpg`;
 
   if (imageUrl) await downloadImage(imageUrl, pathName);
+
+  if (!seriesNo || !isValidSeriesNumber(seriesNo)) return { csv1: [], csv2: [
+    '', seriesIdx, '', jpName, '', '', pathName
+  ] };
+
+  // 只有卡片的部分爬巧巧屋 卡片名稱, 卡片密碼
+  const { chName, uid } = await getPropertiesFromChiaoChiaoWuPage(seriesNo, {
+    id,
+    imageUrl,
+  });
 
   return {
     csv1: [],
@@ -99,8 +107,10 @@ async function main() {
 
     const serieslist = rangeToList(range[0], range[1]);
 
+    await createFolder('data');
+
     // create folder to store images and csv
-    await createFolder(key);
+    await createFolder(`./data/${key}`);
 
     const csvlist = await Promise.all(serieslist.map(id =>
       fetchNecessaryData(
@@ -111,7 +121,7 @@ async function main() {
 
     console.log("🚀 ~ file: index.ts:114 ~ Download images finished, starting to create CSV.")
 
-    const { csv1, csv2 } = csvlist.reduce((acc: CSVs, cur: CSV_Raws) => {
+    const { csv2 } = csvlist.reduce((acc: CSVs, cur: CSV_Raws) => {
       if (!cur) return acc;
       return {
         csv1: [...acc.csv1, cur.csv1],
@@ -119,8 +129,8 @@ async function main() {
       }
     }, { csv1: [seriesHeader], csv2: [cardHeader] } as CSVs);
 
-    writeToCsv([seriesHeader, ['', 1, period, '', chTitle, series, key, '']], `./${key}/系列.csv`);
-    writeToCsv(csv2, `./${key}/卡片.csv`);
+    writeToCsv([seriesHeader, ['', 1, period, '', chTitle, series, key, '']], `./data/${key}/系列.csv`);
+    writeToCsv(csv2, `./data/${key}/卡片.csv`);
   }))
 
   console.log("🚀 ~ file: index.ts:100 ~ main ~ Done!");
