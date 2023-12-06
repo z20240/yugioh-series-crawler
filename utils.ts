@@ -2,7 +2,6 @@ import axios from  'axios';
 import { promises } from 'fs';
 
 export const cardHeader = [
-  "ID",
   "所属系列",
   "罕贵度",
   "卡名",
@@ -13,7 +12,6 @@ export const cardHeader = [
 
 
 export const seriesHeader = [
-  "ID",
   "所属游戏",
   "所属期数",
   "所属版本",
@@ -132,11 +130,14 @@ export async function downloadImage(url: string, pathName: string) {
 }
 
 
-export async function writeToCsv(csv: (string|number)[][], path: string) {
+export async function writeToCsv(csv: (string|number)[][], path: string, optoin?: { append: boolean }) {
   const dirPath = path.split('/').slice(0, -1).join('/');
   const fileName = path.split('/').slice(-1)[0];
 
   const strCSV = csv.map(row => row.join(',')).join('\n');
 
-  promises.writeFile(path, strCSV);
+  optoin?.append ?
+  promises.appendFile(path, strCSV)
+  : promises.writeFile(path, strCSV);
+
 }

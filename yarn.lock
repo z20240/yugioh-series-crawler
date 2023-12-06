@@ -128,6 +128,18 @@ combined-stream@^1.0.8:
   dependencies:
     delayed-stream "~1.0.0"
 
+convert-csv-to-array@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/convert-csv-to-array/-/convert-csv-to-array-1.0.3.tgz#6e4e74001d84788ce1158259ddd66070f9a03710"
+  integrity sha512-F2o7RgfkegFwbxJN+mryqPPJHQaUzRej5JU3dzaXMPk7hVJKnsHu/Mm/y8rku/oflNyEILAbOKe8FcEAQkpxwg==
+  dependencies:
+    convert-string-to-number "^1.0.3"
+
+convert-string-to-number@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/convert-string-to-number/-/convert-string-to-number-1.0.3.tgz#424a8dba3b4f7a0c215878d0d4b97a5a25519bb5"
+  integrity sha512-ZvP2/ob7UvvC6s7euMDU2JXYz1dTdBXS8QvOgCPOiGHHYNsKcJ/WZUui3wL0vngXRfM7/3QSFF2PZWlPjgKeUA==
+
 create-require@^1.1.0:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/create-require/-/create-require-1.1.1.tgz#c1d7e8f1e5f6cfc9ff65f9cd352d37348756c333"
@@ -193,6 +205,11 @@ entities@^4.2.0, entities@^4.4.0:
   version "4.5.0"
   resolved "https://registry.yarnpkg.com/entities/-/entities-4.5.0.tgz#5d268ea5e7113ec74c4d033b79ea5a35a488fb48"
   integrity sha512-V0hjH4dGPh9Ao5p0MoRY6BVqtwCjhz6vI5LT8AJ55H+4g9/4vbHx1I54fS0XuclLhDHArPQCiMjDxjaL8fPxhw==
+
+fake-useragent@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/fake-useragent/-/fake-useragent-1.0.1.tgz#ec7a5d93b4a65118fa6f85c68e9ddef5312c381a"
+  integrity sha512-BOQh1TM//DhrVaeZ+b3w3s4E40rfYcDTn5aoSM2w1xVsZVGglNOzPR5H8KDO8NmF8sT4ppxyb4/MHGIHfZsVDA==
 
 follow-redirects@^1.15.0:
   version "1.15.2"
